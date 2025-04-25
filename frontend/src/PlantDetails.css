@@ -1,0 +1,327 @@
+/* PlantDetails.css - Enhanced and Centered Version */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f5f9f5;
+  padding: 20px;
+}
+
+.plant-detail-page {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 40px;
+  background-color: #fcfcf7;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+}
+
+.back-button {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.back-button:hover {
+  background-color: #388E3C;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+}
+
+.back-button span {
+  font-size: 20px;
+}
+
+.plant-header {
+  margin-bottom: 40px;
+}
+
+.plant-name {
+  font-size: 48px;
+  font-weight: 700;
+  color: #2E7D32;
+  margin-bottom: 10px;
+  font-family: 'Georgia', serif;
+  position: relative;
+  display: inline-block;
+}
+
+.plant-name::after {
+  content: "";
+  display: block;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(to right, #4CAF50, #8BC34A);
+  margin: 15px auto 0;
+  border-radius: 2px;
+}
+
+.scientific-name {
+  font-style: italic;
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 20px;
+}
+
+.benefit-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 40px;
+  justify-content: center;
+}
+
+.benefit-tag {
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  color: #2E7D32;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.benefit-tag:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.plant-image-container {
+  width: 100%;
+  max-width: 550px;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  transition: transform 0.4s ease;
+  border: 8px solid white;
+}
+
+.plant-image-container:hover {
+  transform: scale(1.03);
+}
+
+.plant-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: all 0.5s ease;
+}
+
+.plant-description {
+  font-size: 20px;
+  line-height: 1.8;
+  margin: 20px auto 40px;
+  max-width: 800px;
+  color: #333;
+  text-align: center;
+}
+
+.uses-section {
+  background: linear-gradient(135deg, #f0f7f0, #e8f5e9);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.section-title {
+  color: #2E7D32;
+  font-size: 26px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  position: relative;
+  display: inline-block;
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: #4CAF50;
+  border-radius: 2px;
+}
+
+.uses-content {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #444;
+}
+
+.properties-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto 40px;
+}
+
+.property-card {
+  background-color: white;
+  padding: 25px 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.property-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+.property-title {
+  color: #2E7D32;
+  margin-bottom: 12px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.property-value {
+  color: #555;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.details-section {
+  background-color: #f5f5f5;
+  padding: 30px;
+  border-radius: 15px;
+  border-left: 5px solid #4CAF50;
+  text-align: left;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.details-title {
+  color: #2E7D32;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.details-content {
+  font-size: 17px;
+  line-height: 1.8;
+  color: #444;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .plant-detail-page {
+    padding: 30px 20px;
+  }
+  
+  .back-button {
+    top: 20px;
+    left: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  .plant-name {
+    font-size: 36px;
+  }
+  
+  .scientific-name {
+    font-size: 18px;
+  }
+  
+  .benefit-tag {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+  
+  .properties-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+  }
+  
+  .property-title {
+    font-size: 18px;
+  }
+  
+  .property-value {
+    font-size: 16px;
+  }
+  
+  .plant-description {
+    font-size: 18px;
+  }
+  
+  .section-title {
+    font-size: 22px;
+  }
+  
+  .uses-content {
+    font-size: 16px;
+  }
+}
+
+/* Additional mobile optimizations */
+@media (max-width: 480px) {
+  .plant-detail-page {
+    padding: 20px 15px;
+    margin: 15px auto;
+  }
+  
+  .plant-name {
+    font-size: 32px;
+  }
+  
+  .benefit-tags {
+    gap: 10px;
+  }
+  
+  .benefit-tag {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  .main-content {
+    gap: 30px;
+  }
+  
+  .plant-image-container {
+    border-width: 5px;
+  }
+  
+  .property-card {
+    padding: 15px;
+  }
+}
