@@ -198,5 +198,65 @@ export const plants = [
     description: 'Turmeric is a spice known for its anti-inflammatory and antioxidant properties.',
     uses: ['Helps with arthritis', 'improves digestion', 'enhances skin health'],
     medicinalProperties: ['Anti-inflammatory', 'Antioxidant', 'Digestive']
+  },
+  {
+    name: "Tulsi",
+    scientificName: "Ocimum sanctum",
+    commonNames: ["Holy Basil", "Sacred Basil", "Tulasi"],
+    sanskritName: "तुलसी",
+    image: "/images/tulsi.jpeg",
+    uses: [
+      "Treats respiratory disorders",
+      "Reduces stress and anxiety",
+      "Boosts immunity",
+      "Helps with fever and common cold"
+    ],
+    preparation: "Can be consumed as tea, fresh leaves can be chewed, or dried powder can be mixed with water or honey.",
+    precautions: "Generally safe for consumption, but pregnant women should consult their doctor before use."
+  },
+  {
+    name: "Ashwagandha",
+    scientificName: "Withania somnifera",
+    commonNames: ["Indian Ginseng", "Winter Cherry"],
+    sanskritName: "अश्वगंधा",
+    image: "/images/ashwagandha.jpeg",
+    uses: [
+      "Reduces stress and anxiety",
+      "Improves strength and stamina",
+      "Enhances memory and concentration",
+      "Supports immune system"
+    ],
+    preparation: "Root powder can be mixed with warm milk or water, typically taken before bedtime.",
+    precautions: "Should be avoided during pregnancy. May interact with certain medications."
+  },
+  {
+    name: "Aloe Vera",
+    scientificName: "Aloe barbadensis miller",
+    commonNames: ["Aloe", "Burn Plant", "Medicine Plant"],
+    sanskritName: "घृतकुमारी",
+    image: "/images/aloevera.jpg",
+    uses: [
+      "Heals burns and wounds",
+      "Improves digestion",
+      "Enhances skin health",
+      "Reduces inflammation"
+    ],
+    preparation: "Gel can be applied directly to skin, or juice can be consumed mixed with water.",
+    precautions: "Avoid internal consumption during pregnancy. May cause allergic reactions in some people."
+  },
+  {
+    name: "Neem",
+    scientificName: "Azadirachta indica",
+    commonNames: ["Indian Lilac", "Margosa"],
+    sanskritName: "नीम",
+    image: "/images/neem.jpg",
+    uses: [
+      "Natural antibacterial",
+      "Blood purifier",
+      "Treats skin conditions",
+      "Dental care"
+    ],
+    preparation: "Leaves can be used as paste, oil can be applied topically, or tablets can be taken orally.",
+    precautions: "Not recommended during pregnancy. May affect fertility if taken in large doses."
   }
 ]; 

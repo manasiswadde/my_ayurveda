@@ -1,98 +1,156 @@
-.plant-recognition {
-  padding: 20px;
+.plant-recognition-container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 2rem;
 }
 
-.plant-recognition h1 {
+.plant-recognition-container h1 {
   text-align: center;
-  color: #2e7d32;
-  margin-bottom: 30px;
+  color: #2c5282;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
 }
 
-.recognition-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.upload-section {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.image-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-radius: 10px;
-}
-
-.upload-section, .camera-section {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-button {
-  padding: 10px 20px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 5px;
+.file-input {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 2px dashed #4a5568;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #388e3c;
-}
-
-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-video {
-  max-width: 100%;
-  border-radius: 10px;
-  margin-bottom: 10px;
 }
 
 .preview-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.preview-section img {
-  max-width: 100%;
+.preview-image {
+  max-width: 400px;
   max-height: 400px;
-  border-radius: 10px;
   object-fit: contain;
-}
-
-.plant-info {
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.plant-info h2 {
-  color: #2e7d32;
-  margin-bottom: 15px;
+.identify-button {
+  background-color: #48bb78;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
 }
 
-.plant-info p {
-  margin: 10px 0;
-  line-height: 1.5;
+.identify-button:hover {
+  background-color: #38a169;
+}
+
+.identify-button:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
 }
 
 .error-message {
-  color: #d32f2f;
-  text-align: center;
-  padding: 10px;
-  background-color: #ffebee;
-  border-radius: 5px;
-  margin: 10px 0;
+  color: #e53e3e;
+  padding: 1rem;
+  background-color: #fff5f5;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+.result-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f7fafc;
+  border-radius: 8px;
+}
+
+.result-section h2 {
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.result-section p {
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.ayurvedic-section {
+  margin-top: 2rem;
+  padding: 2rem;
+  background-color: #f0fff4;
+  border-radius: 8px;
+  border: 1px solid #9ae6b4;
+}
+
+.ayurvedic-section h2 {
+  color: #276749;
+  margin-bottom: 1.5rem;
+}
+
+.ayurvedic-image {
+  max-width: 300px;
+  margin: 1rem auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ayurvedic-section h3 {
+  color: #2f855a;
+  margin: 1rem 0;
+}
+
+.uses ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.uses li {
+  margin-bottom: 0.5rem;
+  color: #4a5568;
+}
+
+.preparation, .precautions {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #c6f6d5;
+}
+
+.preparation h3, .precautions h3 {
+  color: #2f855a;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .plant-recognition-container {
+    padding: 1rem;
+  }
+
+  .preview-image {
+    max-width: 100%;
+  }
+
+  .ayurvedic-image {
+    max-width: 100%;
+  }
 } 
