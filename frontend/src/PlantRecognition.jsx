@@ -11,8 +11,18 @@ const PlantRecognition = () => {
   const [ayurvedicDetails, setAyurvedicDetails] = useState(null);
 
   // Plant.id API configuration
-  const PLANT_ID_API_KEY = import.meta.env.VITE_PLANT_ID_API_KEY || 'YOUR_API_KEY_HERE';
-  const PLANT_ID_API_URL = 'https://api.plant.id/v2/identify';
+  const PLANT_ID_API_KEY = import.meta.env.VITE_PLANT_ID_API_KEY;
+  const PLANT_ID_API_URL = 'https://api.plant.id/v3/identification';
+
+  const getWikipediaDescription = async (plantName) => {
+    try {
+      const response = await axios.get(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(plantName)}`);
+      return response.data.extract;
+    } catch (error) {
+      console.error('Error fetching Wikipedia description:', error);
+      return null;
+    }
+  };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -50,42 +60,71 @@ const PlantRecognition = () => {
       return;
     }
 
+    if (!PLANT_ID_API_KEY) {
+      setError('API key is not configured');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
     try {
-      // Convert base64 image to binary
       const base64Data = selectedImage.split(',')[1];
 
-      // Prepare data for Plant.id API
       const data = {
-        api_key: PLANT_ID_API_KEY,
         images: [base64Data],
-        modifiers: ["crops_fast", "similar_images"],
-        plant_language: "en",
-        plant_details: ["common_names", "url", "wiki_description", "taxonomy"]
+        classification_level: "species",
+        similar_images: true
       };
 
-      // Make API request to Plant.id
+      console.log('Sending request with API key:', PLANT_ID_API_KEY.substring(0, 5) + '...');
+
       const response = await axios.post(PLANT_ID_API_URL, data, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Api-Key': PLANT_ID_API_KEY
         }
       });
 
-      if (response.data.suggestions && response.data.suggestions.length > 0) {
-        const plantResult = response.data.suggestions[0];
-        setIdentifiedPlant(plantResult);
+      console.log('Full API Response:', JSON.stringify(response.data, null, 2));
 
-        // Find matching Ayurvedic plant
-        const ayurvedicPlant = findAyurvedicMatch(plantResult.plant_name);
+      if (response.data.result?.classification?.suggestions && response.data.result.classification.suggestions.length > 0) {
+        const plantResult = response.data.result.classification.suggestions[0];
+        
+        // Fetch Wikipedia description
+        const wikiDescription = await getWikipediaDescription(plantResult.name);
+        console.log('Wikipedia description:', wikiDescription);
+        
+        setIdentifiedPlant({
+          plant_name: plantResult.name,
+          probability: plantResult.probability,
+          plant_details: {
+            wiki_description: {
+              value: wikiDescription || 'Description not available. We will fetch more details about this plant from Wikipedia.'
+            }
+          }
+        });
+
+        const ayurvedicPlant = findAyurvedicMatch(plantResult.name);
         setAyurvedicDetails(ayurvedicPlant);
       } else {
         setError('Could not identify the plant. Please try with a different image.');
       }
     } catch (err) {
-      console.error('Error identifying plant:', err);
-      setError('Failed to identify plant. Please try again.');
+      console.error('Full error object:', err);
+      console.error('Error response:', err.response?.data);
+      console.error('Error status:', err.response?.status);
+      console.error('Error headers:', err.response?.headers);
+
+      if (err.response?.status === 401) {
+        setError('Invalid API key. Please check your configuration.');
+      } else if (err.response?.status === 400) {
+        setError('Invalid request format. Please check the image format and try again.');
+      } else if (err.response?.status === 429) {
+        setError('Too many requests. Please try again later.');
+      } else {
+        setError(`Failed to identify plant: ${err.response?.data?.message || err.message || 'Unknown error'}`);
+      }
     } finally {
       setLoading(false);
     }
@@ -127,12 +166,22 @@ const PlantRecognition = () => {
             <h2>Identified Plant</h2>
             <p><strong>Scientific Name:</strong> {identifiedPlant.plant_name}</p>
             <p><strong>Confidence:</strong> {Math.round(identifiedPlant.probability * 100)}%</p>
+            {identifiedPlant.plant_details?.common_names && (
+              <p><strong>Common Names:</strong> {identifiedPlant.plant_details.common_names.join(', ')}</p>
+            )}
             
-            {identifiedPlant.plant_details?.wiki_description?.value && (
-              <div className="description">
-                <h3>Description</h3>
-                <p>{identifiedPlant.plant_details.wiki_description.value}</p>
-              </div>
+            <div className="description">
+              <h3>Description</h3>
+              <p>{identifiedPlant.plant_details?.wiki_description?.value}</p>
+            </div>
+
+            {identifiedPlant.plant_details?.url && (
+              <p>
+                <strong>Learn more: </strong>
+                <a href={identifiedPlant.plant_details.url} target="_blank" rel="noopener noreferrer">
+                  Wikipedia
+                </a>
+              </p>
             )}
           </div>
         )}

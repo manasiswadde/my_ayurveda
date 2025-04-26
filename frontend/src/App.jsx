@@ -12,7 +12,8 @@ const ResetPasswordPage = lazy(() => import('./ResetPasswordPage'));
 const FeaturesPage = lazy(() => import('./FeaturesPage'));
 const PlantInfo = lazy(() => import('./PlantInfo'));
 const PlantDetails = lazy(() => import('./PlantDetails'));
-const  RemediesPage= lazy(() => import('./RemediesPage'));
+const RemediesPage = lazy(() => import('./RemediesPage'));
+const PlantRecognition = lazy(() => import('./PlantRecognition'));
 
 
         
@@ -31,7 +32,7 @@ const App = () => {
           <Route path="/plant-info" element={<PlantInfo />} />
           <Route path="/remedies" element={<RemediesPage />} />
           <Route path="/plant/:id" element={<PlantDetails />} />
-
+          <Route path="/plant-recognition" element={<PlantRecognition />} />
         </Routes>
       </Suspense>
     </Router>
