@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { plants } from './plantData';
 import './PlantRecognition.css';
 
-const PlantRecognition = () => {
+const PlantRecognition = ({ onPlantIdentified }) => {
+  const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -13,16 +15,6 @@ const PlantRecognition = () => {
   // Plant.id API configuration
   const PLANT_ID_API_KEY = import.meta.env.VITE_PLANT_ID_API_KEY;
   const PLANT_ID_API_URL = 'https://api.plant.id/v3/identification';
-
-  const getWikipediaDescription = async (plantName) => {
-    try {
-      const response = await axios.get(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(plantName)}`);
-      return response.data.extract;
-    } catch (error) {
-      console.error('Error fetching Wikipedia description:', error);
-      return null;
-    }
-  };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -44,14 +36,37 @@ const PlantRecognition = () => {
   };
 
   const findAyurvedicMatch = (scientificName) => {
-    // Convert scientific name to lowercase for case-insensitive matching
-    const normalizedName = scientificName.toLowerCase();
+    // Convert scientific name to lowercase and remove any extra spaces
+    const normalizedName = scientificName.toLowerCase().trim();
     
     // Find matching plant from your database
-    return plants.find(plant => 
-      plant.scientificName?.toLowerCase() === normalizedName ||
-      plant.commonNames?.some(name => name.toLowerCase() === normalizedName)
-    );
+    return plants.find(plant => {
+      // Check scientific name (if available)
+      if (plant.scientificName) {
+        if (plant.scientificName.toLowerCase() === normalizedName) {
+          return true;
+        }
+      }
+      
+      // Check common names (if available)
+      if (plant.commonNames) {
+        if (plant.commonNames.some(name => name.toLowerCase() === normalizedName)) {
+          return true;
+        }
+      }
+      
+      // Check plant name as fallback
+      if (plant.name.toLowerCase() === normalizedName) {
+        return true;
+      }
+      
+      // Additional fuzzy matching for partial matches
+      if (normalizedName.includes('aloe vera') || normalizedName.includes('aloe barbadensis')) {
+        return plant.name.toLowerCase() === 'aloe vera';
+      }
+      
+      return false;
+    });
   };
 
   const identifyPlant = async () => {
@@ -77,8 +92,6 @@ const PlantRecognition = () => {
         similar_images: true
       };
 
-      console.log('Sending request with API key:', PLANT_ID_API_KEY.substring(0, 5) + '...');
-
       const response = await axios.post(PLANT_ID_API_URL, data, {
         headers: {
           'Content-Type': 'application/json',
@@ -86,35 +99,21 @@ const PlantRecognition = () => {
         }
       });
 
-      console.log('Full API Response:', JSON.stringify(response.data, null, 2));
-
       if (response.data.result?.classification?.suggestions && response.data.result.classification.suggestions.length > 0) {
         const plantResult = response.data.result.classification.suggestions[0];
-        
-        // Fetch Wikipedia description
-        const wikiDescription = await getWikipediaDescription(plantResult.name);
-        console.log('Wikipedia description:', wikiDescription);
-        
-        setIdentifiedPlant({
-          plant_name: plantResult.name,
-          probability: plantResult.probability,
-          plant_details: {
-            wiki_description: {
-              value: wikiDescription || 'Description not available. We will fetch more details about this plant from Wikipedia.'
-            }
-          }
-        });
-
         const ayurvedicPlant = findAyurvedicMatch(plantResult.name);
-        setAyurvedicDetails(ayurvedicPlant);
+        
+        if (ayurvedicPlant) {
+          onPlantIdentified(ayurvedicPlant);
+          navigate('/ayurvedic-profile');
+        } else {
+          setError('This plant is not found in our Ayurvedic database. Please try another plant.');
+        }
       } else {
         setError('Could not identify the plant. Please try with a different image.');
       }
     } catch (err) {
-      console.error('Full error object:', err);
-      console.error('Error response:', err.response?.data);
-      console.error('Error status:', err.response?.status);
-      console.error('Error headers:', err.response?.headers);
+      console.error('Error:', err);
 
       if (err.response?.status === 401) {
         setError('Invalid API key. Please check your configuration.');
@@ -166,54 +165,111 @@ const PlantRecognition = () => {
             <h2>Identified Plant</h2>
             <p><strong>Scientific Name:</strong> {identifiedPlant.plant_name}</p>
             <p><strong>Confidence:</strong> {Math.round(identifiedPlant.probability * 100)}%</p>
-            {identifiedPlant.plant_details?.common_names && (
-              <p><strong>Common Names:</strong> {identifiedPlant.plant_details.common_names.join(', ')}</p>
-            )}
-            
-            <div className="description">
-              <h3>Description</h3>
-              <p>{identifiedPlant.plant_details?.wiki_description?.value}</p>
-            </div>
-
-            {identifiedPlant.plant_details?.url && (
-              <p>
-                <strong>Learn more: </strong>
-                <a href={identifiedPlant.plant_details.url} target="_blank" rel="noopener noreferrer">
-                  Wikipedia
-                </a>
-              </p>
-            )}
           </div>
         )}
 
         {ayurvedicDetails && (
           <div className="ayurvedic-section">
-            <h2>Ayurvedic Details</h2>
-            <img 
-              src={ayurvedicDetails.image} 
-              alt={ayurvedicDetails.name}
-              className="ayurvedic-image"
-            />
-            <h3>{ayurvedicDetails.name}</h3>
-            <p><strong>Sanskrit Name:</strong> {ayurvedicDetails.sanskritName}</p>
-            <div className="uses">
+            <h2>Ayurvedic Profile</h2>
+            
+            <div className="plant-header">
+              <img 
+                src={ayurvedicDetails.image} 
+                alt={ayurvedicDetails.name}
+                className="ayurvedic-image"
+              />
+              <div className="plant-names">
+                <h3>{ayurvedicDetails.name}</h3>
+                <p><strong>Scientific Name:</strong> {ayurvedicDetails.scientificName}</p>
+                <p><strong>Sanskrit Name:</strong> {ayurvedicDetails.sanskritName}</p>
+                <p><strong>Common Names:</strong> {ayurvedicDetails.commonNames.join(', ')}</p>
+              </div>
+            </div>
+
+            <div className="medicinal-uses">
               <h3>Medicinal Uses</h3>
               <ul>
-                {ayurvedicDetails.uses.map((use, index) => (
+                {ayurvedicDetails.medicinialUses.map((use, index) => (
                   <li key={index}>{use}</li>
                 ))}
               </ul>
             </div>
-            <div className="preparation">
-              <h3>How to Use</h3>
-              <p>{ayurvedicDetails.preparation}</p>
+
+            <div className="parts-used">
+              <h3>Parts Used</h3>
+              {Object.entries(ayurvedicDetails.partsUsed).map(([part, description]) => (
+                <div key={part} className="part-item">
+                  <strong>{part.replace('_', ' ').charAt(0).toUpperCase() + part.slice(1)}:</strong> {description}
+                </div>
+              ))}
             </div>
-            {ayurvedicDetails.precautions && (
-              <div className="precautions">
-                <h3>Precautions</h3>
-                <p>{ayurvedicDetails.precautions}</p>
+
+            <div className="preparation-methods">
+              <h3>How to Use</h3>
+              {Object.entries(ayurvedicDetails.preparationMethods).map(([method, description]) => (
+                <div key={method} className="method-item">
+                  <strong>{method.charAt(0).toUpperCase() + method.slice(1)}:</strong> {description}
+                </div>
+              ))}
+            </div>
+
+            <div className="dosage-precautions">
+              <h3>Dosage and Precautions</h3>
+              <div className="standard-dosage">
+                <strong>Standard Dosage:</strong>
+                <ul>
+                  {Object.entries(ayurvedicDetails.dosageAndPrecautions.standardDosage).map(([form, dosage]) => (
+                    <li key={form}>
+                      <strong>{form.charAt(0).toUpperCase() + form.slice(1)}:</strong> {dosage}
+                    </li>
+                  ))}
+                </ul>
               </div>
-            )}
+              <div className="precautions">
+                <strong>Precautions:</strong>
+                <ul>
+                  {ayurvedicDetails.dosageAndPrecautions.precautions.map((precaution, index) => (
+                    <li key={index}>{precaution}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="active-compounds">
+              <h3>Active Compounds</h3>
+              {ayurvedicDetails.activeCompounds.map((compound, index) => (
+                <div key={index} className="compound-item">
+                  <strong>{compound.name}:</strong> {compound.properties}
+                </div>
+              ))}
+            </div>
+
+            <div className="traditional-knowledge">
+              <h3>Traditional Knowledge</h3>
+              <div className="ayurvedic-properties">
+                <p><strong>Rasa (Taste):</strong> {ayurvedicDetails.traditionalKnowledge.rasa.join(', ')}</p>
+                <p><strong>Guna (Properties):</strong> {ayurvedicDetails.traditionalKnowledge.guna.join(', ')}</p>
+                <p><strong>Virya (Potency):</strong> {ayurvedicDetails.traditionalKnowledge.virya}</p>
+                <p><strong>Vipaka (Post-digestive effect):</strong> {ayurvedicDetails.traditionalKnowledge.vipaka}</p>
+                <p><strong>Effect on Doshas:</strong> {ayurvedicDetails.traditionalKnowledge.doshaEffect}</p>
+              </div>
+            </div>
+
+            <div className="habitat-cultivation">
+              <h3>Habitat and Cultivation</h3>
+              <p><strong>Natural Habitat:</strong> {ayurvedicDetails.habitatAndCultivation.naturalHabitat}</p>
+              <p><strong>Cultivation:</strong> {ayurvedicDetails.habitatAndCultivation.cultivation}</p>
+              <p><strong>Growing Conditions:</strong> {ayurvedicDetails.habitatAndCultivation.growingConditions}</p>
+            </div>
+
+            <div className="classical-references">
+              <h3>Classical References</h3>
+              {ayurvedicDetails.classicalReferences.map((reference, index) => (
+                <div key={index} className="reference-item">
+                  <strong>{reference.text}:</strong> {reference.description}
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>

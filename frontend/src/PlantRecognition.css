@@ -7,6 +7,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .plant-recognition-container h1 {
@@ -27,16 +29,16 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 800px;
-  margin: 0 auto;
+  margin: 20px 0;
   box-sizing: border-box;
 }
 
 .file-input {
   width: 100%;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  padding: 10px;
+  margin: 20px 0;
   border: 2px dashed #4caf50;
-  border-radius: 8px;
+  border-radius: 5px;
   cursor: pointer;
   background-color: #f1f8e9;
 }
@@ -46,81 +48,81 @@
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  margin-top: 1.5rem;
+  margin: 20px 0;
   padding: 1rem;
   background-color: #f5f5f5;
   border-radius: 8px;
+  text-align: center;
 }
 
 .preview-image {
-  max-width: 500px;
-  max-height: 500px;
+  max-width: 400px;
+  max-height: 400px;
   object-fit: contain;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  margin: 20px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .identify-button {
   background-color: #4caf50;
   color: white;
-  padding: 1rem 2rem;
-  border-radius: 8px;
+  padding: 12px 24px;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 1.1rem;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-size: 16px;
+  margin: 10px 0;
+  transition: background-color 0.3s;
 }
 
 .identify-button:hover {
-  background-color: #388e3c;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #45a049;
 }
 
 .identify-button:disabled {
-  background-color: #a0aec0;
+  background-color: #cccccc;
   cursor: not-allowed;
 }
 
 .error-message {
-  color: #e53e3e;
-  padding: 1rem;
-  background-color: #fff5f5;
+  color: #f44336;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #f44336;
   border-radius: 4px;
-  margin: 1rem 0;
+  background-color: #ffebee;
 }
 
 .result-section {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background-color: #f7fafc;
+  margin: 30px 0;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .result-section h2 {
-  color: #2d3748;
-  margin-bottom: 1rem;
+  color: #2e7d32;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #4CAF50;
 }
 
 .result-section p {
-  margin-bottom: 0.5rem;
-}
-
-.description {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e2e8f0;
+  margin: 10px 0;
+  font-size: 1.1em;
+  color: #333;
 }
 
 .ayurvedic-section {
-  margin-top: 2rem;
-  padding: 2rem;
-  background-color: #f0fff4;
+  margin: 30px 0;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
-  border: 1px solid #9ae6b4;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .ayurvedic-section h2 {
@@ -129,9 +131,9 @@
 }
 
 .ayurvedic-image {
-  max-width: 300px;
-  margin: 1rem auto;
-  display: block;
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -163,6 +165,103 @@
   margin-bottom: 0.5rem;
 }
 
+.plant-header {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  align-items: flex-start;
+}
+
+.plant-names h3 {
+  margin: 0 0 10px 0;
+  color: #2e7d32;
+}
+
+.plant-names p {
+  margin: 5px 0;
+}
+
+.medicinal-uses, .parts-used, .preparation-methods, 
+.dosage-precautions, .active-compounds, .traditional-knowledge,
+.habitat-cultivation, .classical-references {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.medicinal-uses ul, 
+.dosage-precautions ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+.part-item, .method-item, .compound-item, .reference-item {
+  margin: 10px 0;
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.part-item:last-child, .method-item:last-child, 
+.compound-item:last-child, .reference-item:last-child {
+  border-bottom: none;
+}
+
+.ayurvedic-properties {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.ayurvedic-properties p {
+  margin: 5px 0;
+}
+
+h2 {
+  color: #2e7d32;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #4CAF50;
+}
+
+h3 {
+  color: #1b5e20;
+  margin: 15px 0;
+}
+
+.standard-dosage {
+  margin: 15px 0;
+}
+
+.standard-dosage ul,
+.precautions ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.standard-dosage li,
+.precautions li {
+  margin: 8px 0;
+  line-height: 1.4;
+}
+
+.dosage-precautions {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.dosage-precautions h3 {
+  color: #2e7d32;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #4CAF50;
+  padding-bottom: 8px;
+}
+
 @media (max-width: 768px) {
   .plant-recognition-container {
     padding: 1rem;
@@ -173,6 +272,11 @@
   }
 
   .ayurvedic-image {
-    max-width: 100%;
+    width: 100%;
+    height: auto;
+  }
+
+  .ayurvedic-properties {
+    grid-template-columns: 1fr;
   }
 } 

@@ -3,32 +3,33 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* Prevent scrollbars */
-  }
+    overflow-x: hidden;
+    overflow-y: auto;
+}
   
-  .features-page {
-    width: 100vw; /* Full viewport width */
-    height: 100vh; /* Full viewport height */
+.features-page {
+    min-height: 100vh;
+    width: 100%;
     text-align: center;
-    background: linear-gradient(to bottom, #e0f7fa, #c8e6c9); /* Greenary effect */
-    padding: 0; /* Remove padding */
-    margin: 0; /* Remove margin */
-    box-sizing: border-box; /* Include padding and border in element's dimensions */
+    background: linear-gradient(to bottom, #e0f7fa, #c8e6c9);
+    padding: 2rem 0;
+    margin: 0;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center content vertically */
-    align-items: center; /* Center content horizontally */
-    overflow: hidden; /* Ensure no overflow */
-  }
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
   
-  .features-heading {
+.features-heading {
     font-size: 2.5rem;
     color: #2e7d32; /* Green color */
     margin-bottom: 20px; /* Reduced margin for better spacing */
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-  }
+}
   
-  .features-container {
+.features-container {
     display: flex;
     justify-content: center; /* Center cards horizontally */
     flex-wrap: wrap;
@@ -38,40 +39,40 @@ html, body {
     max-width: 1200px; /* Limit width for better readability */
     box-sizing: border-box; /* Include padding in width calculation */
     overflow-y: auto; /* Allow vertical scrolling if content exceeds height */
-  }
+}
   
-  .feature-card {
+.feature-card {
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
     padding: 20px;
     width: 300px; /* Fixed width for each card */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
+}
   
-  .feature-card:hover {
+.feature-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
+}
   
-  .feature-image {
+.feature-image {
     width: 300px;
     height: 300px;
     margin-bottom: 20px;
-  }
+}
   
-  .feature-title {
+.feature-title {
     font-size: 1.5rem;
     color: #2e7d32; /* Green color */
     margin-bottom: 10px;
-  }
+}
   
-  .feature-description {
+.feature-description {
     font-size: 1rem;
     color: #333;
-  }
+}
   
-  .feature-button {
+.feature-button {
     padding: 15px 30px;
     font-size: 1.2rem;
     color: white;
@@ -81,21 +82,21 @@ html, body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     width: 100%; /* Make button full width inside the card */
     margin-top: 15px; /* Add space above the button */
-  }
+}
   
-  .feature-button:hover {
+.feature-button:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
+}
   
-  .identify-plant {
+.identify-plant {
     background-color: #4caf50; /* Green */
-  }
+}
   
-  .explore-plant {
+.explore-plant {
     background-color: #8bc34a; /* Light Green */
-  }
+}
   
-  .explore-remedies {
+.explore-remedies {
     background-color: #2e7d32; /* Dark Green */
-  }
+}

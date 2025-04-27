@@ -1,6 +1,9 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'sonner';
+import PlantRecognition from './PlantRecognition';
+import AyurvedicProfile from './components/AyurvedicProfile';
+import './App.css';
 
 
 // Lazy loading components for performance optimization
@@ -13,11 +16,12 @@ const FeaturesPage = lazy(() => import('./FeaturesPage'));
 const PlantInfo = lazy(() => import('./PlantInfo'));
 const PlantDetails = lazy(() => import('./PlantDetails'));
 const RemediesPage = lazy(() => import('./RemediesPage'));
-const PlantRecognition = lazy(() => import('./PlantRecognition'));
 
 
         
 const App = () => {
+  const [identifiedPlant, setIdentifiedPlant] = useState(null);
+
   return (
     <Router>
       <Toaster position="top-right" richColors closeButton />
@@ -32,7 +36,14 @@ const App = () => {
           <Route path="/plant-info" element={<PlantInfo />} />
           <Route path="/remedies" element={<RemediesPage />} />
           <Route path="/plant/:id" element={<PlantDetails />} />
-          <Route path="/plant-recognition" element={<PlantRecognition />} />
+          <Route 
+            path="/plant-recognition" 
+            element={<PlantRecognition onPlantIdentified={setIdentifiedPlant} />} 
+          />
+          <Route 
+            path="/ayurvedic-profile" 
+            element={<AyurvedicProfile plant={identifiedPlant} />} 
+          />
         </Routes>
       </Suspense>
     </Router>
