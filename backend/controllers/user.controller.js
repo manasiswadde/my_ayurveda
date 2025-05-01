@@ -1,6 +1,7 @@
 import { User } from "../models/user.model.js"; 
 import bcrypt from "bcryptjs";
 import crypto from "crypto"; // Add this import for generating random tokens
+import { sendEmail } from "../config/emailConfig.js";
 
 // Add the register function and export it
 export const register = async (req, res) => {
@@ -28,26 +29,50 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    
+    console.log('Login attempt - Email:', email);
+    
+    if (!email || !password) {
+      console.log('Missing email or password');
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required"
+      });
+    }
 
     // Find user by email
     const user = await User.findOne({ email });
+    
     if (!user) {
+      console.log('No user found with email:', email);
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password",
+        message: "Invalid email or password"
       });
     }
 
-    // 🔹 Check if the entered password matches the stored hashed password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log('User found:', {
+      id: user._id,
+      email: user.email,
+      hasPassword: !!user.password,
+      passwordLength: user.password ? user.password.length : 0
+    });
+
+    // Use the comparePassword method from the user schema
+    const isPasswordValid = await user.comparePassword(password);
+    console.log('Password comparison result:', isPasswordValid);
+    
     if (!isPasswordValid) {
+      console.log('Invalid password for user:', email);
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password",
+        message: "Invalid email or password"
       });
     }
 
-    // 🔹 Send user details (without password)
+    console.log('Login successful for user:', email);
+
+    // Send user details (without password)
     return res.status(200).json({
       success: true,
       message: "Login successful",
@@ -61,8 +86,25 @@ export const login = async (req, res) => {
     console.error("Login Error:", error);
     return res.status(500).json({
       success: false,
-      message: "Server error. Please try again later.",
+      message: "Server error. Please try again later."
     });
+  }
+};
+
+export const verifyResetToken = async (req, res) => {
+  try {
+    const { token } = req.query;
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    return res.status(200).json({ valid: !!user });
+  } catch (error) {
+    console.error("Token Verification Error:", error);
+    return res.status(500).json({ valid: false });
   }
 };
 
@@ -87,14 +129,50 @@ export const forgotPassword = async (req, res) => {
     user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
 
-    // Correct the frontend reset link
+    // Create reset URL
     const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
-    console.log(`Password reset link: ${resetUrl}`); // Debugging only
+
+    // Create email content
+    const emailSubject = "Password Reset Request - Ayurveda App";
+    const emailHtml = `
+      <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
+        <h2 style="color: #2e7d32; text-align: center;">Reset Your Password</h2>
+        <p>Hello,</p>
+        <p>You have requested to reset your password for your Ayurveda App account.</p>
+        <p>Please click the button below to reset your password. This link will expire in 1 hour.</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${resetUrl}" 
+             style="background-color: #2e7d32; 
+                    color: white; 
+                    padding: 12px 24px; 
+                    text-decoration: none; 
+                    border-radius: 5px;
+                    display: inline-block;">
+            Reset Password
+          </a>
+        </div>
+        <p>If you didn't request this password reset, please ignore this email.</p>
+        <p>For security reasons, this link will expire in 1 hour.</p>
+        <hr style="border: 1px solid #eee; margin: 20px 0;">
+        <p style="color: #666; font-size: 12px; text-align: center;">
+          This is an automated email, please do not reply.
+        </p>
+      </div>
+    `;
+
+    // Send the email
+    const emailSent = await sendEmail(email, emailSubject, emailHtml);
+
+    if (!emailSent) {
+      return res.status(500).json({
+        success: false,
+        message: "Failed to send reset email. Please try again later."
+      });
+    }
 
     return res.status(200).json({
       success: true,
-      message: "Password reset instructions sent to your email",
-      resetToken // REMOVE THIS IN PRODUCTION
+      message: "Password reset instructions sent to your email"
     });
 
   } catch (error) {
@@ -106,60 +184,73 @@ export const forgotPassword = async (req, res) => {
   }
 };
 
-
-export const verifyResetToken = async (req, res) => {
+export const resetPassword = async (req, res) => {
   try {
-    const { token } = req.query;
+    const { token } = req.params;
+    const { password } = req.body;
+
+    console.log('Password reset attempt with token');
+
+    // Hash the token to match the stored hashed token
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
+    // Find user with valid token
     const user = await User.findOne({
       resetPasswordToken: hashedToken,
       resetPasswordExpires: { $gt: Date.now() }
     });
 
-    return res.status(200).json({ valid: !!user });
-  } catch (error) {
-    console.error("Token Verification Error:", error);
-    return res.status(500).json({ valid: false });
-  }
-};
-
-
-export const resetPassword = async (req, res) => {
-  try {
-    const { token, newPassword } = req.body;
-
-    console.log("Reset Token Received:", token);
-    console.log("New Password:", newPassword);
-
-    // Find user with valid token
-    const user = await User.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() }, // Ensure token is not expired
-    });
-
     if (!user) {
-      console.log("Invalid or expired token");
-      return res.status(400).json({ message: "Invalid or expired token" });
+      console.log('No user found with valid reset token');
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired reset token"
+      });
     }
 
-    console.log("User Found:", user.email);
+    console.log('User found for password reset:', user.email);
 
-    // Hash the new password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    // Update password directly in MongoDB to avoid double hashing
+    await User.updateOne(
+      { _id: user._id },
+      { 
+        $set: { 
+          password: await bcrypt.hash(password, 10),
+          resetPasswordToken: undefined,
+          resetPasswordExpires: undefined,
+          updatedAt: new Date()
+        } 
+      }
+    );
 
-    // Update user's password
-    user.password = hashedPassword;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
-    await user.save();
+    // Verify the update
+    const updatedUser = await User.findById(user._id);
+    const testLogin = await updatedUser.comparePassword(password);
+    
+    console.log('Password reset verification:', {
+      passwordUpdated: updatedUser.password !== user.password,
+      testLoginSuccessful: testLogin
+    });
 
-    console.log("Password Updated Successfully");
+    if (!testLogin) {
+      console.log('Warning: Password reset verification failed');
+      return res.status(500).json({
+        success: false,
+        message: "Password reset failed. Please try again."
+      });
+    }
 
-    res.json({ message: "Password updated successfully" });
+    console.log('Password reset successful for user:', user.email);
+    return res.status(200).json({
+      success: true,
+      message: "Password has been reset successfully"
+    });
+
   } catch (error) {
     console.error("Reset Password Error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later."
+    });
   }
 };

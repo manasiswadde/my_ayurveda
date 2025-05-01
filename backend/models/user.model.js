@@ -38,7 +38,18 @@ userSchema.pre("save", async function (next) {
 
 // 🔹 Compare hashed passwords
 userSchema.methods.comparePassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+  console.log('Comparing passwords:');
+  console.log('- Entered password length:', enteredPassword.length);
+  console.log('- Stored hashed password length:', this.password.length);
+  
+  try {
+    const isMatch = await bcrypt.compare(enteredPassword, this.password);
+    console.log('Password comparison result:', isMatch);
+    return isMatch;
+  } catch (error) {
+    console.error('Error comparing passwords:', error);
+    return false;
+  }
 };
 
 // 🔹 Generate Password Reset Token

@@ -17,7 +17,6 @@ const PlantInfo = lazy(() => import('./PlantInfo'));
 const PlantDetails = lazy(() => import('./PlantDetails'));
 const RemediesPage = lazy(() => import('./RemediesPage'));
 
-
         
 const App = () => {
   const [identifiedPlant, setIdentifiedPlant] = useState(null);
@@ -31,7 +30,7 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
           <Route path="/feature" element={<FeaturesPage />} />
           <Route path="/plant-info" element={<PlantInfo />} />
           <Route path="/remedies" element={<RemediesPage />} />

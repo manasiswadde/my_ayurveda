@@ -18,8 +18,15 @@ const FeaturesPage = () => {
     navigate('/remedies'); // Navigate to the RemediesPage
   };
 
+  const handleBack = () => {
+    navigate('/');
+  };
+
   return (
     <div className="features-page">
+      <button className="back-button" onClick={handleBack}>
+        ← Back to Home
+      </button>
       <h1 className="features-heading">Our Features</h1>
       <div className="features-container">
         {/* Feature 1: Plant Recognition */}

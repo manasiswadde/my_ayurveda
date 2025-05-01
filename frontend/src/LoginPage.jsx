@@ -23,10 +23,11 @@ const LoginPage = () => {
     setIsLoading(true);
     
     try {
-      const API_BASE_URL = "http://localhost:4040/api";
-      const response = await axios.post(`${API_BASE_URL}/auth/login`, { 
-        email: formData.email, 
-        password: formData.password 
+      const API_BASE_URL = "http://localhost:4040";
+      console.log('Attempting login with:', { email: formData.email.trim() });
+      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, { 
+        email: formData.email.trim(), 
+        password: formData.password.trim() 
       }, {
         withCredentials: true,
         headers: {
@@ -51,6 +52,7 @@ const LoginPage = () => {
       }
     } catch (error) {
       console.error('Login error:', error);
+      console.error('Error response:', error.response?.data);
       const errorMessage = error.response?.data?.message || 
         (error.code === 'ERR_NETWORK' ? "Network error. Please check your connection." : "An error occurred. Please try again.");
       toast.error(errorMessage);
@@ -72,6 +74,7 @@ const LoginPage = () => {
             required 
             value={formData.email}
             onChange={handleChange}
+            autoComplete="email"
           />
           <input 
             type="password" 
@@ -80,6 +83,7 @@ const LoginPage = () => {
             required 
             value={formData.password}
             onChange={handleChange}
+            autoComplete="current-password"
           />
           <Link to="/forgot-password" className="forgot-password">Forgot your password?</Link>
           <button type="submit" disabled={isLoading}>

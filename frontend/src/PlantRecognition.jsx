@@ -16,6 +16,10 @@ const PlantRecognition = ({ onPlantIdentified }) => {
   const PLANT_ID_API_KEY = import.meta.env.VITE_PLANT_ID_API_KEY;
   const PLANT_ID_API_URL = 'https://api.plant.id/v3/identification';
 
+  const handleBack = () => {
+    navigate('/feature');
+  };
+
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -131,6 +135,7 @@ const PlantRecognition = ({ onPlantIdentified }) => {
 
   return (
     <div className="plant-recognition-container">
+      <button className="back-button" onClick={handleBack}>Back</button>
       <h1>Plant Recognition</h1>
       
       <div className="upload-section">
