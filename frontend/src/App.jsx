@@ -16,8 +16,12 @@ const FeaturesPage = lazy(() => import('./FeaturesPage'));
 const PlantInfo = lazy(() => import('./PlantInfo'));
 const PlantDetails = lazy(() => import('./PlantDetails'));
 const RemediesPage = lazy(() => import('./RemediesPage'));
+const AdminDashboard = lazy(() => import('./AdminDashboard'));
+const AddUserForm = lazy(() => import('./components/AddUserForm'));
+const AddPlantForm = lazy(() => import('./components/AddPlantForm'));
+const EditPlantForm = lazy(() => import('./components/EditPlantForm'));
 
-        
+
 const App = () => {
   const [identifiedPlant, setIdentifiedPlant] = useState(null);
 
@@ -43,6 +47,10 @@ const App = () => {
             path="/ayurvedic-profile" 
             element={<AyurvedicProfile plant={identifiedPlant} />} 
           />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/users/add" element={<AddUserForm />} />
+          <Route path="/admin/plants/add" element={<AddPlantForm />} />
+          <Route path="/admin/plants/edit/:id" element={<EditPlantForm />} />
         </Routes>
       </Suspense>
     </Router>

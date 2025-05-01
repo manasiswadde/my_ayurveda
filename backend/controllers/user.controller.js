@@ -1,31 +1,58 @@
 import { User } from "../models/user.model.js"; 
 import bcrypt from "bcryptjs";
 import crypto from "crypto"; // Add this import for generating random tokens
+import jwt from "jsonwebtoken";
 import { sendEmail } from "../config/emailConfig.js";
 
 // Add the register function and export it
 export const register = async (req, res) => {
   try {
-    const { fullname, email, password } = req.body;
+    const { fullname, email, password, role } = req.body;
+    
+    // Validate role if provided
+    if (role && !['user', 'admin'].includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid role. Must be either 'user' or 'admin'"
+      });
+    }
+
     // Add your registration logic here (e.g., hashing password, saving user)
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ fullname, email, password: hashedPassword });
+    const user = await User.create({ 
+      fullname, 
+      email, 
+      password: hashedPassword,
+      role: role || 'user' // Use provided role or default to 'user'
+    });
     
     return res.status(201).json({
       success: true,
       message: "User registered successfully",
-      user,
+      user: {
+        _id: user._id,
+        fullname: user.fullname,
+        email: user.email,
+        role: user.role
+      }
     });
   } catch (error) {
     console.error("Registration Error:", error);
+    // Check for duplicate email error
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "Email already exists"
+      });
+    }
     return res.status(500).json({
       success: false,
-      message: "Failed to register user.",
+      message: "Failed to register user."
     });
   }
 };
 
-// Existing login function
+// Login function
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -54,8 +81,7 @@ export const login = async (req, res) => {
     console.log('User found:', {
       id: user._id,
       email: user.email,
-      hasPassword: !!user.password,
-      passwordLength: user.password ? user.password.length : 0
+      role: user.role
     });
 
     // Use the comparePassword method from the user schema
@@ -70,17 +96,29 @@ export const login = async (req, res) => {
       });
     }
 
+    // Generate JWT token
+    const token = jwt.sign(
+      { 
+        userId: user._id,
+        role: user.role 
+      },
+      process.env.JWT_SECRET || 'your-secret-key',
+      { expiresIn: '24h' }
+    );
+
     console.log('Login successful for user:', email);
 
-    // Send user details (without password)
+    // Send user details and token
     return res.status(200).json({
       success: true,
       message: "Login successful",
+      token,
       user: {
         _id: user._id,
         fullname: user.fullname,
         email: user.email,
-      },
+        role: user.role
+      }
     });
   } catch (error) {
     console.error("Login Error:", error);
@@ -251,6 +289,52 @@ export const resetPassword = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server error. Please try again later."
+    });
+  }
+};
+
+export const updateUserRole = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { role } = req.body;
+
+    // Validate role
+    if (!['user', 'admin'].includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid role. Must be either 'user' or 'admin'"
+      });
+    }
+
+    // Find and update user
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { role },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "User role updated successfully",
+      user: {
+        _id: user._id,
+        fullname: user.fullname,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    console.error("Update Role Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update user role"
     });
   }
 };

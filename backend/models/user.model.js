@@ -15,6 +15,11 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user'
+    },
     password: {
       type: String,
       required: [true, "Password is required"],
@@ -69,4 +74,5 @@ userSchema.methods.clearResetToken = function () {
   this.resetPasswordExpires = undefined;
 };
 
-export const User = mongoose.model("User", userSchema);
+// Check if the model exists before creating it
+export const User = mongoose.models.User || mongoose.model("User", userSchema);

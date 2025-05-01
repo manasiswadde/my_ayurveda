@@ -5,17 +5,21 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import userRoute from "./routes/user.route.js";
 import plantRoutes from "./routes/plantRoutes.js";
+import adminRoutes from "./routes/admin.route.js";
 import path from "path";
 import { fileURLToPath } from 'url';
+import { connectDB } from "./config/database.js";
 
 // Get directory path for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Load environment variables
 dotenv.config();
+
 const app = express();
 
-// ✅ Correct CORS configuration
+// Middleware
 app.use(cors({
   origin: "http://localhost:5173", // Allow only your frontend
   credentials: true, // Required for cookies and authentication headers
@@ -37,10 +41,14 @@ mongoose
 // ✅ Use Routes
 app.use("/api/auth", userRoute);
 app.use("/api/plants", plantRoutes);
+app.use("/api/admin", adminRoutes);
 
-// ✅ Resolve Port Conflict
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+// Start server
+const PORT = process.env.PORT || 4040;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+  connectDB();
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {

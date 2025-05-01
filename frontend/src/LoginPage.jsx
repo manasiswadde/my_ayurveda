@@ -29,23 +29,27 @@ const LoginPage = () => {
         email: formData.email.trim(), 
         password: formData.password.trim() 
       }, {
-        withCredentials: true,
         headers: {
           'Content-Type': 'application/json'
         }
       });
     
       if (response.data?.success) {
-        // Store user data in localStorage or context if needed
+        // Store user data and token in localStorage
         localStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('token', response.data.token);
         
         // Show success toast
         toast.success(response.data.message || "Successfully logged in!");
         
         // Small delay to allow toast to be seen before redirect
         setTimeout(() => {
-          // Redirect to dashboard or home page
-          navigate('/feature');
+          // Redirect based on user role
+          if (response.data.user.role === 'admin') {
+            navigate('/admin/dashboard');
+          } else {
+            navigate('/feature');
+          }
         }, 500);
       } else {
         toast.error(response.data.message || "Invalid credentials. Please try again.");

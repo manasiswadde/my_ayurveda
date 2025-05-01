@@ -7,10 +7,11 @@ import axios from 'axios';
 const SignupPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    fullName: '',
+    fullname: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: 'user' // Default role
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,13 +35,14 @@ const SignupPage = () => {
     try {
       const API_BASE_URL = "http://localhost:4040/api";
       const payload = {
-        fullname: formData.fullName,
+        fullname: formData.fullname,
         email: formData.email,
-        password: formData.password
+        password: formData.password,
+        role: formData.role
       };
       
+      console.log('Sending registration request:', { ...payload, password: '***' });
       const response = await axios.post(`${API_BASE_URL}/auth/signup`, payload, {
-        withCredentials: true,
         headers: { 'Content-Type': 'application/json' }
       });
       
@@ -51,7 +53,7 @@ const SignupPage = () => {
         // Small delay to allow toast to be seen before redirect
         setTimeout(() => {
           // Redirect to login page after successful registration
-          navigate('/remedia');
+          navigate('/login');
         }, 500);
       } else {
         toast.error(response.data.message || "Registration failed. Please try again.");
@@ -74,10 +76,10 @@ const SignupPage = () => {
         <form onSubmit={handleRegistration}>
           <input 
             type="text" 
-            name="fullName"
+            name="fullname"
             placeholder="Full Name" 
             required 
-            value={formData.fullName} 
+            value={formData.fullname} 
             onChange={handleChange} 
           />
           <input 
@@ -104,6 +106,18 @@ const SignupPage = () => {
             value={formData.confirmPassword} 
             onChange={handleChange} 
           />
+          <div className="role-selection">
+            <select
+              id="role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="role-select"
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
           <button type="submit" disabled={isLoading}>
             {isLoading ? 'Signing up...' : 'Sign up'}
           </button>
