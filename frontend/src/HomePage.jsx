@@ -1,6 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
+import { MdEmail, MdPhone, MdLocationOn } from "react-icons/md";
+import ashwagandhaImg from './assets/ashwagandha.jpg';
+import tulsiImg from './assets/tulsi.jpg';
+import turmericImg from './assets/turmeric.jpg';
+import neemImg from './assets/neem.jpg';
+
+
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -68,16 +75,32 @@ const HomePage = () => {
       <section id="about" ref={aboutSectionRef} className="about-section">
         <h2>About Ayurvedic Plants and Medicine</h2>
         <p>
-          Ayurveda, the ancient Indian system of medicine, has been using plants and natural remedies for thousands of years to promote health and wellness. Ayurvedic plants like <span className="highlight">Ashwagandha</span>, <span className="highlight">Tulsi</span>, <span className="highlight">Turmeric</span>, and <span className="highlight">Neem</span> are known for their powerful healing properties.
+          Ayurveda, the ancient Indian system of medicine, has been using plants and natural remedies for thousands of years to promote health and wellness. Ayurvedic plants like <span style={{color: '#388e3c', fontWeight: 600}}>Ashwagandha</span>, <span style={{color: '#388e3c', fontWeight: 600}}>Tulsi</span>, <span style={{color: '#388e3c', fontWeight: 600}}>Turmeric</span>, and <span style={{color: '#388e3c', fontWeight: 600}}>Neem</span> are known for their powerful healing properties.
         </p>
         <p>
           These plants are used to treat a variety of conditions, from stress and anxiety to inflammation and digestive issues. Ayurvedic medicine emphasizes the balance of mind, body, and spirit, and these plants play a crucial role in achieving that balance.
         </p>
-        <div className="about-images">
-          <img src="/ashwagandha.jpg" alt="Ashwagandha" />
-          <img src="/tulsi.jpg" alt="Tulsi" />
-          <img src="/turmeric.jpg" alt="Turmeric" />
-          <img src="/neem.jpg" alt="Neem" />
+        <div className="plant-cards">
+          <div className="plant-card">
+            <img src={ashwagandhaImg} alt="Ashwagandha" />
+            <span>Ashwagandha</span>
+           
+          </div>
+          <div className="plant-card">
+            <img src={tulsiImg} alt="Tulsi" />
+            <span>Tulsi</span>
+            
+          </div>
+          <div className="plant-card">
+            <img src={turmericImg} alt="Turmeric" />
+            <span>Turmeric</span>
+           
+          </div>
+          <div className="plant-card">
+            <img src={neemImg} alt="Neem" />
+            <span>Neem</span>
+           
+          </div>
         </div>
 
         {/* Importance of Ayurveda Plants */}
@@ -115,16 +138,16 @@ const HomePage = () => {
         </p>
         <div className="contact-info">
           <div className="contact-item">
-            <img src="/mail.png" alt="Email" className="contact-icon" />
-            <p>Email: info@ayurveda.com</p>
+            <MdEmail size={32} color="#388e3c" />
+            <span>Email: info@ayurveda.com</span>
           </div>
           <div className="contact-item">
-            <img src="/phone.png" alt="Phone" className="contact-icon" />
-            <p>Phone: +1 (123) 456-7890</p>
+            <MdPhone size={32} color="#388e3c" />
+            <span>Phone: +1 (123) 456-7890</span>
           </div>
           <div className="contact-item">
-            <img src="/address.png" alt="Location" className="contact-icon" />
-            <p>Address: 123 Ayurveda Lane, Wellness City, Earth</p>
+            <MdLocationOn size={32} color="#388e3c" />
+            <span>Address: 123 Ayurveda Lane, Wellness City, Earth</span>
           </div>
         </div>
       </section>

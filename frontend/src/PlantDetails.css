@@ -1,4 +1,4 @@
-/* PlantDetails.css - Enhanced and Centered Version */
+/* PlantDetails.css - Modified for new layout */
 
 * {
   margin: 0;
@@ -23,10 +23,15 @@ body {
   position: relative;
 }
 
+/* Modified header container to fix overlap */
+.header-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 30px;
+  position: relative;
+}
+
 .back-button {
-  position: absolute;
-  top: 30px;
-  left: 30px;
   background-color: #4CAF50;
   color: white;
   border: none;
@@ -52,8 +57,43 @@ body {
   font-size: 20px;
 }
 
-.plant-header {
-  margin-bottom: 40px;
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Plant image container styles */
+.plant-image-container {
+  width: 100%;
+  max-width: 550px;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  transition: transform 0.4s ease;
+  border: 8px solid white;
+  margin-bottom: 20px; /* Add space after image */
+}
+
+.plant-image-container:hover {
+  transform: scale(1.03);
+}
+
+.plant-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: all 0.5s ease;
+}
+
+/* Plant info header (moved below image) */
+.plant-info-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .plant-name {
@@ -79,7 +119,7 @@ body {
 .scientific-name {
   font-style: italic;
   color: #666;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   font-size: 20px;
 }
 
@@ -87,7 +127,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   justify-content: center;
 }
 
@@ -107,38 +147,10 @@ body {
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
 }
 
-.main-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-}
-
-.plant-image-container {
-  width: 100%;
-  max-width: 550px;
-  overflow: hidden;
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-  transition: transform 0.4s ease;
-  border: 8px solid white;
-}
-
-.plant-image-container:hover {
-  transform: scale(1.03);
-}
-
-.plant-image {
-  width: 100%;
-  height: auto;
-  display: block;
-  transition: all 0.5s ease;
-}
-
 .plant-description {
   font-size: 20px;
   line-height: 1.8;
-  margin: 20px auto 40px;
+  margin: 0 auto 30px;
   max-width: 800px;
   color: #333;
   text-align: center;
@@ -248,8 +260,6 @@ body {
   }
   
   .back-button {
-    top: 20px;
-    left: 20px;
     padding: 8px 16px;
     font-size: 14px;
   }
@@ -314,7 +324,7 @@ body {
   }
   
   .main-content {
-    gap: 30px;
+    gap: 20px;
   }
   
   .plant-image-container {
