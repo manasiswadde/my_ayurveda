@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './RemediesPage.css'; // Ensure the CSS file is correctly linked
+import RemedyDetail from './RemedyDetail'; // Add this import if not present
 
 const RemediesPage = () => {
   const navigate = useNavigate();
@@ -14,12 +15,18 @@ const RemediesPage = () => {
         {
           name: 'Bitter Melon (Karela, Momordica charantia)',
           usage: 'Extract the juice of fresh bitter melon and drink 30–50 ml on an empty stomach every morning.',
-          info: 'Bitter melon contains compounds that mimic insulin and help lower blood sugar levels.',
+          info: 'Bitter melon contains compounds that mimic insulin and help lower blood sugar levels. Contains charantin and polypeptide-p, which have blood glucose-lowering effects. Regular consumption may help manage blood sugar in type 2 diabetes. It is also rich in vitamins C and A, and supports immune health.',
+          symptoms: 'Frequent urination, excessive thirst, fatigue, blurred vision.',
+          precautions: 'Not recommended for pregnant women. May cause hypoglycemia if combined with diabetes medication.',
+          image: '/images/bittermelon.jpg'
         },
         {
           name: 'Fenugreek (Methi, Trigonella foenum-graecum)',
           usage: 'Soak 1–2 teaspoons of fenugreek seeds overnight. Chew the seeds and drink the water in the morning.',
-          info: 'Fenugreek seeds are rich in soluble fiber, which slows down carbohydrate absorption.',
+          info: 'Fenugreek seeds are rich in soluble fiber, which slows down carbohydrate absorption. Contains saponins and 4-hydroxyisoleucine, which help regulate blood glucose. Fenugreek also supports cholesterol management and digestive health.',
+          symptoms: 'Frequent urination, excessive thirst, fatigue, blurred vision.',
+          precautions: 'May lower blood sugar too much if taken with diabetes medication. Not recommended during pregnancy in large amounts.',
+          image: '/images/fenugreek.jpg'
         },
       ],
     },
@@ -29,12 +36,18 @@ const RemediesPage = () => {
         {
           name: 'Tulsi (Holy Basil, Ocimum sanctum)',
           usage: 'Boil 8–10 fresh tulsi leaves in water for 5 minutes. Add ginger and honey for taste. Drink this tea twice daily.',
-          info: 'Tulsi has anti-inflammatory and antimicrobial properties.',
+          info: 'Tulsi has anti-inflammatory and antimicrobial properties. Contains eugenol and other essential oils that help relieve respiratory symptoms. It boosts immunity, relieves cough and cold, and helps clear respiratory tract infections.',
+          symptoms: 'Cough, cold, sore throat, congestion, mild fever.',
+          precautions: 'Avoid excessive use during pregnancy. May interact with blood-thinning medications.',
+          image: '/images/tulsi.jpg'
         },
         {
           name: 'Ginger (Adrak, Zingiber officinale)',
           usage: 'Boil grated ginger in water for 10 minutes. Add honey and lemon. Drink this tea 2–3 times a day.',
-          info: 'Ginger reduces inflammation in the airways.',
+          info: 'Ginger reduces inflammation in the airways. Contains gingerol, which has anti-inflammatory and antioxidant effects. Ginger is also effective for nausea, improves digestion, and helps fight infections.',
+          symptoms: 'Cough, sore throat, chest congestion, nausea.',
+          precautions: 'May cause heartburn in sensitive individuals. Use cautiously if on blood thinners.',
+          image: '/images/ginger.jpg'
         },
       ],
     },
@@ -45,6 +58,9 @@ const RemediesPage = () => {
           name: 'Turmeric (Haldi, Curcuma longa)',
           usage: 'Mix turmeric powder with water or coconut oil to make a paste. Apply it to the wound.',
           info: 'Turmeric has antiseptic properties.',
+          symptoms: 'Cuts, wounds, minor infections, skin inflammation.',
+          precautions: 'May cause yellow staining of skin. Avoid if allergic to turmeric.',
+          image: '/images/turmeric.jpg'
         },
       ],
     },
@@ -55,6 +71,9 @@ const RemediesPage = () => {
           name: 'Shatavari (Asparagus racemosus)',
           usage: 'Take 1–2 grams of shatavari powder with milk twice daily.',
           info: 'Shatavari regulates hormones.',
+          symptoms: 'Irregular periods, menstrual cramps, hormonal imbalance.',
+          precautions: 'Consult a doctor if pregnant or breastfeeding. May cause mild stomach upset.',
+          image: '/images/shatavari.jpg'
         },
       ],
     },
@@ -65,6 +84,9 @@ const RemediesPage = () => {
           name: 'Triphala (Amalaki, Bibhitaki, Haritaki)',
           usage: 'Soak triphala powder in water overnight. Use the water to wash your eyes in the morning.',
           info: 'Triphala improves eye health.',
+          symptoms: 'Eye strain, redness, mild vision issues.',
+          precautions: 'Use clean water for soaking. Consult a doctor for severe eye problems.',
+          image: '/images/triphala.jpg'
         },
       ],
     },
@@ -75,6 +97,9 @@ const RemediesPage = () => {
           name: 'Vidanga (Embelia ribes)',
           usage: 'Take 1–2 grams of vidanga powder with honey or warm water.',
           info: 'Vidanga eliminates intestinal worms.',
+          symptoms: 'Abdominal pain, bloating, irregular bowel movements.',
+          precautions: 'Consult a doctor for persistent symptoms. Not for use in pregnancy.',
+          image: '/images/vidanga.jpg'
         },
       ],
     },
@@ -85,6 +110,9 @@ const RemediesPage = () => {
           name: 'Curcumin (from Turmeric, Curcuma longa)',
           usage: 'Mix 1 teaspoon of turmeric powder in warm milk and drink daily.',
           info: 'Curcumin has anti-cancer properties.',
+          symptoms: 'Varies by cancer type; consult a doctor for diagnosis.',
+          precautions: 'Not a substitute for medical treatment. Consult oncologist before use.',
+          image: '/images/curcumin.jpg'
         },
       ],
     },
@@ -95,11 +123,17 @@ const RemediesPage = () => {
           name: 'Haritaki (Terminalia chebula)',
           usage: 'Take 1–2 grams of haritaki powder with warm water at night.',
           info: 'Haritaki improves digestion and relieves constipation, which helps in managing piles.',
+          symptoms: 'Painful bowel movements, rectal bleeding, swelling.',
+          precautions: 'Avoid overdose. Consult a doctor if symptoms persist.',
+          image: '/images/haritaki.jpg'
         },
         {
           name: 'Radish (Raphanus sativus)',
           usage: 'Drink radish juice daily or include radish in your diet.',
           info: 'Radish helps reduce inflammation and bleeding associated with piles.',
+          symptoms: 'Rectal pain, bleeding, swelling.',
+          precautions: 'Avoid if you have gallstones. Use in moderation.',
+          image: '/images/radish.jpg'
         },
       ],
     },
@@ -348,18 +382,20 @@ const RemediesPage = () => {
 
       {/* List of Remedies */}
       <div className="remedies-list">
-        {filteredRemedies.map((condition, index) => (
-          <div key={index} className="condition-section">
-            <h2 className="condition-title">{condition.condition}</h2>
-            {condition.remedies.map((remedy, remedyIndex) => (
-              <div key={remedyIndex} className="remedy-card">
-                <h3 className="remedy-name">{remedy.name}</h3>
-                <p className="remedy-usage">
-                  <strong>How to Use:</strong> {remedy.usage}
-                </p>
-                <p className="remedy-info">
-                  <strong>Additional Info:</strong> {remedy.info}
-                </p>
+        {filteredRemedies.map((group, groupIdx) => (
+          <div key={group.condition}>
+            <h2>{group.condition}</h2>
+            <hr />
+            {group.remedies.map((remedy, idx) => (
+              <div
+                key={remedy.name}
+                className="remedy-card"
+                onClick={() => navigate('/remedy-detail', { state: { remedy, condition: group.condition } })}
+                style={{ cursor: 'pointer' }}
+              >
+                <h3>{remedy.name}</h3>
+                <p><strong>How to Use:</strong> {remedy.usage}</p>
+                <p><em>Additional Info:</em> {remedy.info}</p>
               </div>
             ))}
           </div>

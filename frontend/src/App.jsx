@@ -4,6 +4,7 @@ import { Toaster } from 'sonner';
 import PlantRecognition from './PlantRecognition';
 import AyurvedicProfile from './components/AyurvedicProfile';
 import './App.css';
+import EditUser from './EditUser'; // Adjust the path if needed
 
 
 // Lazy loading components for performance optimization
@@ -20,6 +21,7 @@ const AdminDashboard = lazy(() => import('./AdminDashboard'));
 const AddUserForm = lazy(() => import('./components/AddUserForm'));
 const AddPlantForm = lazy(() => import('./components/AddPlantForm'));
 const EditPlantForm = lazy(() => import('./components/EditPlantForm'));
+const RemedyDetail = lazy(() => import('./RemedyDetail'));
 
 
 const App = () => {
@@ -51,6 +53,8 @@ const App = () => {
           <Route path="/admin/users/add" element={<AddUserForm />} />
           <Route path="/admin/plants/add" element={<AddPlantForm />} />
           <Route path="/admin/plants/edit/:id" element={<EditPlantForm />} />
+          <Route path="/remedy-detail" element={<RemedyDetail />} />
+          <Route path="/admin/users/edit/:id" element={<EditUser />} />
         </Routes>
       </Suspense>
     </Router>

@@ -11,6 +11,7 @@ import {
   deletePlant,
   getPlant
 } from '../controllers/admin.controller.js';
+import {User } from '../models/user.model.js';
 
 const router = express.Router();
 
@@ -29,5 +30,17 @@ router.get('/plants/:plantId', getPlant);
 router.post('/plants', createPlant);
 router.put('/plants/:plantId', updatePlant);
 router.delete('/plants/:plantId', deletePlant);
+
+router.get('/users/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 export default router; 

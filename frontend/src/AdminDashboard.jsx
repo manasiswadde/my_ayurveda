@@ -125,6 +125,13 @@ const AdminDashboard = () => {
   return (
     <div className="admin-dashboard">
       <header className="dashboard-header">
+        <button 
+          className="back-button" 
+          onClick={() => navigate('/login')} 
+          style={{ marginRight: '1rem', padding: '0.5rem 1rem', background: '#f5f5f5', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer' }}
+        >
+          ← Back
+        </button>
         <h1>Admin Dashboard</h1>
         <nav className="dashboard-nav">
           <button 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -6,6 +6,7 @@ import './AddPlantForm.css';
 
 const AddPlantForm = () => {
   const navigate = useNavigate();
+  const [previewUrl, setPreviewUrl] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     scientificName: '',
@@ -16,6 +17,13 @@ const AddPlantForm = () => {
     imageUrl: ''
   });
   const [isLoading, setIsLoading] = useState(false);
+
+  // Update preview URL when imageUrl changes
+  useEffect(() => {
+    if (formData.imageUrl) {
+      setPreviewUrl(formData.imageUrl);
+    }
+  }, [formData.imageUrl]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,8 +44,18 @@ const AddPlantForm = () => {
   };
 
   const removeArrayField = (field, index) => {
+    if (formData[field].length <= 1) {
+      // Keep at least one empty input
+      setFormData({ ...formData, [field]: [''] });
+      return;
+    }
+    
     const newArray = formData[field].filter((_, i) => i !== index);
     setFormData({ ...formData, [field]: newArray });
+  };
+
+  const handleImageError = () => {
+    setPreviewUrl('/placeholder-plant.jpg');
   };
 
   const handleSubmit = async (e) => {
@@ -50,6 +68,15 @@ const AddPlantForm = () => {
       benefits: formData.benefits.filter(benefit => benefit.trim() !== ''),
       uses: formData.uses.filter(use => use.trim() !== '')
     };
+
+    // If arrays would be empty after filtering, add at least one item
+    if (cleanedFormData.benefits.length === 0) {
+      cleanedFormData.benefits = [''];
+    }
+    
+    if (cleanedFormData.uses.length === 0) {
+      cleanedFormData.uses = [''];
+    }
 
     try {
       const token = localStorage.getItem('token');
@@ -77,10 +104,10 @@ const AddPlantForm = () => {
   };
 
   return (
-    <div className="add-plant-form">
-      <div className="form-container">
+    <div className="edit-plant-container">
+      <div className="edit-plant-card">
         <h2>Add New Plant</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="edit-plant-form">
           <div className="form-group">
             <label htmlFor="name">Plant Name</label>
             <input
@@ -90,6 +117,7 @@ const AddPlantForm = () => {
               value={formData.name}
               onChange={handleChange}
               required
+              placeholder="Enter plant name"
             />
           </div>
 
@@ -102,6 +130,7 @@ const AddPlantForm = () => {
               value={formData.scientificName}
               onChange={handleChange}
               required
+              placeholder="Enter scientific name"
             />
           </div>
 
@@ -114,68 +143,71 @@ const AddPlantForm = () => {
               onChange={handleChange}
               required
               rows={4}
+              placeholder="Enter plant description"
             />
           </div>
 
           <div className="form-group">
             <label>Benefits</label>
-            {formData.benefits.map((benefit, index) => (
-              <div key={index} className="array-input">
-                <input
-                  type="text"
-                  value={benefit}
-                  onChange={(e) => handleArrayChange(index, 'benefits', e.target.value)}
-                  placeholder="Enter benefit"
-                  required={index === 0}
-                />
-                {index > 0 && (
+            <div className="array-inputs">
+              {formData.benefits.map((benefit, index) => (
+                <div key={`benefit-${index}`} className="array-input">
+                  <input
+                    type="text"
+                    value={benefit}
+                    onChange={(e) => handleArrayChange(index, 'benefits', e.target.value)}
+                    placeholder="Enter benefit"
+                    required={index === 0}
+                  />
                   <button
                     type="button"
                     onClick={() => removeArrayField('benefits', index)}
                     className="remove-btn"
+                    aria-label="Remove benefit"
                   >
-                    Remove
+                    <span>×</span>
                   </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => addArrayField('benefits')}
-              className="add-btn"
-            >
-              Add Benefit
-            </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => addArrayField('benefits')}
+                className="add-btn"
+              >
+                Add Benefit
+              </button>
+            </div>
           </div>
 
           <div className="form-group">
             <label>Uses</label>
-            {formData.uses.map((use, index) => (
-              <div key={index} className="array-input">
-                <input
-                  type="text"
-                  value={use}
-                  onChange={(e) => handleArrayChange(index, 'uses', e.target.value)}
-                  placeholder="Enter use"
-                />
-                {index > 0 && (
+            <div className="array-inputs">
+              {formData.uses.map((use, index) => (
+                <div key={`use-${index}`} className="array-input">
+                  <input
+                    type="text"
+                    value={use}
+                    onChange={(e) => handleArrayChange(index, 'uses', e.target.value)}
+                    placeholder="Enter use"
+                  />
                   <button
                     type="button"
                     onClick={() => removeArrayField('uses', index)}
                     className="remove-btn"
+                    aria-label="Remove use"
                   >
-                    Remove
+                    <span>×</span>
                   </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => addArrayField('uses')}
-              className="add-btn"
-            >
-              Add Use
-            </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => addArrayField('uses')}
+                className="add-btn"
+              >
+                Add Use
+              </button>
+            </div>
           </div>
 
           <div className="form-group">
@@ -206,13 +238,30 @@ const AddPlantForm = () => {
               required
               placeholder="https://example.com/image.jpg"
             />
+            {previewUrl && (
+              <div className="image-preview">
+                <img 
+                  src={previewUrl} 
+                  alt="Plant preview" 
+                  onError={handleImageError}
+                />
+              </div>
+            )}
           </div>
 
           <div className="button-group">
-            <button type="submit" disabled={isLoading}>
+            <button 
+              type="submit" 
+              className="submit-btn" 
+              disabled={isLoading}
+            >
               {isLoading ? 'Creating...' : 'Create Plant'}
             </button>
-            <button type="button" onClick={() => navigate('/admin/dashboard')} className="cancel">
+            <button 
+              type="button" 
+              onClick={() => navigate('/admin/dashboard')} 
+              className="cancel-btn"
+            >
               Cancel
             </button>
           </div>
@@ -222,4 +271,4 @@ const AddPlantForm = () => {
   );
 };
 
-export default AddPlantForm; 
+export default AddPlantForm;

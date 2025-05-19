@@ -47,7 +47,7 @@ const PlantInfo = () => {
     {
       id: 6,
       name: 'Bitter Melon',
-      image: '/images/bittermelon.jpeg',
+      image: '/images/bittermelon.jpg',
       description: 'Bitter Melon is known for its blood sugar-regulating properties.',
       uses: 'Helps manage diabetes, improves skin health, and aids digestion.',
     },
@@ -173,7 +173,7 @@ const PlantInfo = () => {
     {
       id: 24,
       name: 'Tulsi',
-      image: '/images/tulsi.jpeg',
+      image: '/images/tulsi.jpg',
       description: 'Tulsi, also known as Holy Basil, is revered for its medicinal and spiritual properties.',
       uses: 'Boosts immunity, reduces stress, and improves respiratory health.',
     },

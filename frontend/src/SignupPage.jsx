@@ -10,8 +10,7 @@ const SignupPage = () => {
     fullname: '',
     email: '',
     password: '',
-    confirmPassword: '',
-    role: 'user' // Default role
+    confirmPassword: ''
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,8 +36,7 @@ const SignupPage = () => {
       const payload = {
         fullname: formData.fullname,
         email: formData.email,
-        password: formData.password,
-        role: formData.role
+        password: formData.password
       };
       
       console.log('Sending registration request:', { ...payload, password: '***' });
@@ -106,18 +104,6 @@ const SignupPage = () => {
             value={formData.confirmPassword} 
             onChange={handleChange} 
           />
-          <div className="role-selection">
-            <select
-              id="role"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              className="role-select"
-            >
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
           <button type="submit" disabled={isLoading}>
             {isLoading ? 'Signing up...' : 'Sign up'}
           </button>

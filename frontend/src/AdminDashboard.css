@@ -246,4 +246,26 @@ td {
   .actions button {
     width: 100%;
   }
+}
+
+.dashboard-title-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.back-button {
+  padding: 0.5rem 1rem;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #2e7d32;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.back-button:hover {
+  background: #e0e0e0;
 } 
